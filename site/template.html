@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lao Lottery Formula Lab · เลขเด่นงวดหน้า + สถิติแพ้ชนะย้อนหลัง</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--line:#dde3ee;--text:#16202f;--mut:#5d6b82;--acc:#0f9d78;--acc2:#2563eb;
+--warn:#b45309;--warnbg:#fef3c7;--bad:#c0392b;--good:#0f9d78;--chip:#eef2fa;--ctl:#8a94a8}
+@media(prefers-color-scheme:dark){:root{--bg:#0b1020;--card:#141c30;--line:#2a3750;--text:#eaf0ff;--mut:#9aa8c3;
+--acc:#4ddcb5;--acc2:#7fb0ff;--warn:#fbbf24;--warnbg:#3a2f12;--bad:#ff7b6b;--good:#4ddcb5;--chip:#1c2742;--ctl:#7c88a3}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 "Noto Sans Thai","Sarabun",system-ui,sans-serif}
+header{padding:20px max(16px,calc((100% - 1100px)/2));border-bottom:1px solid var(--line);background:var(--card)}
+h1{margin:0;font-size:1.35rem}h2{margin:0 0 10px;font-size:1.15rem}h3{margin:0 0 6px;font-size:1rem}
+.sub{color:var(--mut);font-size:.88rem;margin-top:2px}
+main{max-width:1100px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:16px}
+.hero{border-color:var(--acc);border-width:2px}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.big{font-size:1.5rem;font-weight:700}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.kind{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--bg)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chip{background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:2px 9px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.5px}
+.chip.top{background:var(--acc);color:#04261d;border-color:var(--acc);font-size:1.15rem}
+.badge{display:inline-block;border-radius:999px;padding:2px 10px;font-size:.8rem;font-weight:600;border:1px solid var(--line)}
+.b-none{background:var(--chip);color:var(--mut)}.b-luck{background:var(--warnbg);color:var(--warn)}
+.b-signal{background:var(--good);color:#04261d}.b-control{background:transparent;color:var(--ctl)}
+.b-ok{background:var(--good);color:#04261d}.b-no{background:transparent;color:var(--bad);border-color:var(--bad)}
+.note{background:var(--warnbg);color:var(--warn);border-radius:10px;padding:10px 12px;font-size:.9rem}
+.mut{color:var(--mut);font-size:.88rem}
+table{width:100%;border-collapse:collapse;font-size:.88rem;font-variant-numeric:tabular-nums}
+th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child,td.l,th.l{text-align:left}
+th{color:var(--mut);font-weight:600}tr.pri td{background:rgba(15,157,120,.12);font-weight:600}
+tr.ctl td{color:var(--ctl);font-style:italic}
+.scroll{overflow-x:auto}
+.tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.tab{border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:999px;padding:6px 14px;cursor:pointer;font:inherit}
+.tab.on{background:var(--acc2);color:#fff;border-color:var(--acc2)}
+button.copy{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:8px;padding:3px 10px;cursor:pointer;font:inherit;font-size:.8rem}
+svg{width:100%;height:auto;display:block}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.stat{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.stat b{display:block;font-size:1.2rem}
+details summary{cursor:pointer;color:var(--acc2)}
+code{background:var(--chip);padding:1px 6px;border-radius:6px;font-size:.82rem}
+footer{max-width:1100px;margin:0 auto;padding:8px 16px 40px;color:var(--mut);font-size:.82rem}
+</style>
+</head>
+<body>
+<header>
+  <h1>Lao Lottery Formula Lab</h1>
+  <div class="sub" id="meta"></div>
+</header>
+<main>
+  <section class="card hero" id="next"></section>
+  <section class="card" id="honest"></section>
+  <section class="card">
+    <h2>กระดานผลแพ้ชนะ: ระบบเทียบกับการสุ่ม</h2>
+    <div class="tabs" id="tabs"></div>
+    <div id="board"></div>
+  </section>
+  <section class="card"><h2>ผลทายจริงที่ล็อกไว้ก่อนออกผล (Live record)</h2><div id="live"></div></section>
+  <section class="card"><h2>ผลย้อนหลังแบบจำลอง (Walk-forward)</h2><div id="records"></div></section>
+  <section class="card"><h2>ผลรางวัล 30 งวดล่าสุด</h2><div class="scroll" id="recent"></div></section>
+  <section class="card" id="method"></section>
+</main>
+<footer>
+  เว็บนี้สร้างอัตโนมัติด้วย GitHub Actions · ข้อมูลจาก lotto.thaiorc.com · เพื่อการศึกษาและความบันเทิง ไม่ใช่คำแนะนำทางการเงิน
+  ผู้ที่อายุต่ำกว่า 20 ปีไม่ควรซื้อสลาก · หากการเล่นเริ่มกระทบชีวิต โทร 1323 (สายด่วนสุขภาพจิต)
+</footer>
+
+<script>
+const D = /*__DATA__*/null;
+const KINDS = ["top2","bottom2","top3"];
+const $ = id => document.getElementById(id);
+function el(tag, attrs, ...kids){
+  const e = document.createElement(tag);
+  for (const [k,v] of Object.entries(attrs||{})){
+    if (k==="class") e.className=v; else if (k.startsWith("on")) e.addEventListener(k.slice(2),v); else e.setAttribute(k,v);
+  }
+  kids.flat().forEach(c=>{ if(c!=null) e.append(c.nodeType?c:document.createTextNode(c)); });
+  return e;
+}
+const thDate = iso => new Date(iso+"T12:00:00+07:00").toLocaleDateString("th-TH",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+const thShort = iso => new Date(iso+"T12:00:00+07:00").toLocaleDateString("th-TH",{day:"numeric",month:"short",year:"2-digit"});
+const VERDICT = {none:["ไม่ต่างจากการสุ่ม","b-none"],luck:["ดูดีกว่าสุ่ม แต่น่าจะบังเอิญ","b-luck"],
+                 signal:["พบสัญญาณ (ต้องยืนยันกับงวดใหม่)","b-signal"],control:["สูตรควบคุม","b-control"]};
+const badge = v => el("span",{class:"badge "+VERDICT[v][1]},VERDICT[v][0]);
+const fmt = (n,d=2)=>Number(n).toFixed(d);
+
+/* ---------- header ---------- */
+$("meta").textContent = `ข้อมูล ${D.total_draws.toLocaleString()} งวด · ล่าสุด ${thShort(D.data_through)} · อัปเดตเว็บ ${new Date(D.generated_at_utc).toLocaleString("th-TH")}`;
+
+/* ---------- next draw ---------- */
+(function(){
+  const N = D.next, root = $("next");
+  const cutoff = new Date(`${N.target_date}T${String(N.cutoff_hour_ict).padStart(2,"0")}:00:00+07:00`);
+  const cd = el("span",{class:"big"});
+  const tick = ()=>{
+    const s = Math.floor((cutoff-Date.now())/1000);
+    if (s<=0){ cd.textContent="ปิดรับแล้ว (รอผล)"; return; }
+    const h=Math.floor(s/3600), m=Math.floor(s%3600/60);
+    cd.textContent = `เหลือ ${h} ชม. ${m} นาที ก่อนตัดรอบ`;
+  };
+  tick(); setInterval(tick,30000);
+  root.append(el("div",{class:"row"},
+    el("div",{}, el("div",{class:"mut"},"งวดหน้า"), el("div",{class:"big"},thDate(N.target_date)), cd),
+    el("div",{}, el("span",{class:"badge "+(N.locked?"b-ok":"b-no")}, N.locked?"🔒 ล็อกคำทายก่อนออกผลแล้ว":"ยังไม่ได้ล็อก"),
+       el("div",{class:"mut"}, N.sha256?`SHA-256 ${N.sha256.slice(0,12)}…`:"") ,
+       el("div",{class:"mut"}, `ใช้ข้อมูลถึง ${thShort(N.data_through)}`))));
+  root.append(el("p",{class:"mut"},`เลขเด่นจากสูตร "${D.primary.name}" (กำหนดไว้ล่วงหน้า ไม่เลือกสูตรที่ย้อนหลังสวยที่สุดมาโชว์)`));
+  const grid = el("div",{class:"grid3"});
+  KINDS.forEach(k=>{
+    const x = N.kinds[k];
+    const chips = el("div",{class:"chips"}, x.picks.map((p,i)=>el("span",{class:"chip"+(i<3?" top":"")},p)));
+    const btn = el("button",{class:"copy",onclick:e=>{navigator.clipboard.writeText(x.picks.join(" "));e.target.textContent="คัดลอกแล้ว";}},"คัดลอกเลข");
+    grid.append(el("div",{class:"kind"},
+      el("div",{class:"row"},el("h3",{},`${x.label} · ${x.picks.length} เลข`),btn),
+      chips, badge(x.verdict),
+      el("p",{class:"mut"},`ย้อนหลัง ${D.backtest[k].tests} งวด สูตรนี้ถูก ${fmt(x.hit_pct)}% · สุ่มล้วนคาดหวัง ${fmt(x.baseline_pct)}%`),
+      el("p",{class:"mut"},`อัตราจ่ายสมมติ ${x.ev.payout_assumed} เท่า → คาดว่าได้คืน ≈ ${x.ev.return_per_unit_pct}% ของเงินที่ลง · จะเสมอตัวได้ต้องจ่ายอย่างน้อย ${x.ev.breakeven_payout} เท่า`)));
+  });
+  root.append(grid);
+})();
+
+/* ---------- honesty ---------- */
+(function(){
+  const sigs = KINDS.flatMap(k=>D.backtest[k].strategies.filter(s=>!s.is_control&&s.verdict==="signal"));
+  const msg = sigs.length
+    ? `พบสูตรที่ผ่านเกณฑ์ ${sigs.length} รายการ (ดูตารางด้านล่าง) แต่ต้องรอผลจริงที่ล็อกไว้ก่อนออกผลยืนยันอีกครั้ง ก่อนเชื่อถือ`
+    : `ณ ตอนนี้ ไม่มีสูตรใดชนะการสุ่มอย่างมีนัยสำคัญ (ตรวจ ${D.bonferroni_m} การทดสอบ แก้ค่า p แบบ Bonferroni) เลขที่แสดงจึงมีโอกาสถูกเท่ากับเลขอะไรก็ได้`;
+  $("honest").append(el("h2",{},"อ่านก่อนเล่น"), el("div",{class:"note"},msg),
+    el("p",{class:"mut"},"ผลสลากเป็นการสุ่ม: ทุกเลขมีโอกาสเท่ากัน (2 ตัว = 1% ต่อเลข, 3 ตัว = 0.1% ต่อเลข) การเลือกหลายเลขเพิ่มโอกาสถูก แต่เพิ่มต้นทุนเท่ากัน จึงไม่เพิ่มกำไรคาดหวัง ระบบนี้จึงทำหน้าที่ \"บันทึกและพิสูจน์\" ว่าสูตรไหนเกินสุ่มจริงหรือไม่ ไม่ใช่เครื่องรับประกันผล"));
+})();
+
+/* ---------- charts ---------- */
+function lineChart(series, opts){
+  const W=720,H=240,P={l:48,r:12,t:12,b:24}, n=series[0].v.length;
+  const all = series.flatMap(s=>s.v).concat(opts.band?opts.band.map(x=>x):[],opts.band?opts.band.map(x=>-x):[]);
+  let lo=Math.min(0,...all), hi=Math.max(0,...all); if(hi-lo<1){hi+=1;lo-=1;}
+  const X=i=>P.l+(W-P.l-P.r)*i/Math.max(1,n-1), Y=v=>P.t+(H-P.t-P.b)*(1-(v-lo)/(hi-lo));
+  const ns="http://www.w3.org/2000/svg", s=document.createElementNS(ns,"svg"); s.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  const add=(t,a,txt)=>{const e=document.createElementNS(ns,t);for(const k in a)e.setAttribute(k,a[k]);if(txt)e.textContent=txt;s.append(e);return e;};
+  if(opts.band){
+    const up=opts.band.map((b,i)=>`${X(i)},${Y(b)}`), dn=opts.band.map((b,i)=>`${X(i)},${Y(-b)}`).reverse();
+    add("polygon",{points:up.concat(dn).join(" "),fill:"currentColor",opacity:".08"});
+  }
+  [lo,0,hi].forEach(v=>{add("line",{x1:P.l,x2:W-P.r,y1:Y(v),y2:Y(v),stroke:"currentColor",opacity:v===0?".5":".15"});
+    add("text",{x:P.l-6,y:Y(v)+4,"text-anchor":"end","font-size":11,fill:"currentColor",opacity:".7"},fmt(v,opts.d||1));});
+  series.forEach(se=>add("polyline",{points:se.v.map((v,i)=>`${X(i)},${Y(v)}`).join(" "),fill:"none",stroke:se.c,"stroke-width":2,"stroke-dasharray":se.dash||""}));
+  add("text",{x:P.l,y:H-6,"font-size":11,fill:"currentColor",opacity:".7"},thShort(opts.dates[0]));
+  add("text",{x:W-P.r,y:H-6,"text-anchor":"end","font-size":11,fill:"currentColor",opacity:".7"},thShort(opts.dates[n-1]));
+  const wrap = el("div",{});
+  wrap.append(el("div",{class:"mut"},opts.title),s,
+    el("div",{class:"mut"},series.map(x=>el("span",{style:`color:${x.c};margin-right:14px`},"━ "+x.name))));
+  return wrap;
+}
+
+/* ---------- scoreboard ---------- */
+let cur = "top2";
+function renderTabs(){
+  const t=$("tabs"); t.replaceChildren();
+  KINDS.forEach(k=>t.append(el("button",{class:"tab"+(k===cur?" on":""),onclick:()=>{cur=k;renderTabs();renderBoard();renderRecords();renderLive();}},D.backtest[k].label)));
+}
+function renderBoard(){
+  const B=D.backtest[cur], root=$("board"); root.replaceChildren();
+  const pr=B.strategies.find(s=>s.is_primary);
+  root.append(el("p",{class:"mut"},`ทดสอบ walk-forward ${B.tests} งวด (${thShort(B.from)} – ${thShort(B.to)}) เลือก ${B.picks} เลขต่องวด · สุ่มล้วนคาดว่าถูก ${fmt(B.baseline_pct)}% ·  p ปรับ = p × ${D.bonferroni_m} (Bonferroni)`));
+  const tb=el("table",{}, el("thead",{},el("tr",{},
+    ["สูตร","ถูก/ทดสอบ","% ถูก","ช่วงเชื่อมั่น 95%","สุ่มคาด %","z","p","p ปรับ","ผล"].map((h,i)=>el(i?"th":"th",{class:i?"":"l"},h)))));
+  const body=el("tbody");
+  B.strategies.forEach(s=>body.append(el("tr",{class:s.is_primary?"pri":s.is_control?"ctl":""},
+    el("td",{class:"l"},s.name+(s.is_primary?" ★":"")),`${s.hits}/${s.tests}`,fmt(s.hit_pct),`${fmt(s.ci_low_pct,1)}–${fmt(s.ci_high_pct,1)}`,
+    fmt(s.baseline_pct),fmt(s.z),fmt(s.p_value,3),fmt(s.p_adj,3),el("td",{},badge(s.verdict)))));
+  tb.append(body); root.append(el("div",{class:"scroll"},tb));
+  const C=B.chart;
+  root.append(lineChart([{name:"สูตรหลัก ("+D.primary.name+")",v:C.primary,c:"var(--acc)"},{name:"สุ่ม (ควบคุม)",v:C.control,c:"var(--ctl)",dash:"5 4"}],
+    {dates:C.dates,band:C.band,d:1,title:"ถูกสะสม เกิน/ขาด จากที่คาดหวังตามการสุ่ม (แถบเทา = ช่วง ±2σ ที่การสุ่มล้วนเกิดได้)"}));
+  root.append(lineChart([{name:"สูตรหลัก",v:C.pnl_primary,c:"var(--acc2)"},{name:"สุ่ม",v:C.pnl_control,c:"var(--ctl)",dash:"5 4"}],
+    {dates:C.dates,d:0,title:`กำไร/ขาดทุนจำลองสะสม (ลง 1 หน่วยต่อเลข อัตราจ่ายสมมติ ${D.next.kinds[cur].ev.payout_assumed} เท่า)`}));
+}
+
+/* ---------- live + records ---------- */
+function resultCell(hit){return el("td",{},el("span",{class:"badge "+(hit?"b-ok":"b-no")},hit?"ชนะ":"แพ้"));}
+function renderLive(){
+  const L=D.live, root=$("live"); root.replaceChildren();
+  const s=L.summary[cur];
+  if(!L.draws){
+    root.append(el("p",{class:"mut"},"ยังไม่มีงวดที่ล็อกคำทายไว้ก่อนแล้วผลออก ระบบจะเริ่มสะสมสถิติจริงตั้งแต่งวดหน้า ทุกคำทายถูกบันทึกลง Git พร้อม timestamp จึงแก้ย้อนหลังไม่ได้"));
+    return;
+  }
+  root.append(el("div",{class:"stats"},
+    el("div",{class:"stat"},el("span",{class:"mut"},"จำนวนงวดที่ตรวจแล้ว"),el("b",{},L.draws)),
+    s?el("div",{class:"stat"},el("span",{class:"mut"},`${D.backtest[cur].label}: ชนะ/แพ้`),el("b",{},`${s.hits}/${s.misses}`)):null,
+    s?el("div",{class:"stat"},el("span",{class:"mut"},"% ถูก (สุ่มคาด "+fmt(s.baseline_pct)+"%)"),el("b",{},fmt(s.hit_pct)+"%")):null));
+  const tb=el("table",{},el("thead",{},el("tr",{},["งวด","เลขที่ออก","เลขที่ทาย","ผล"].map((h,i)=>el("th",{class:i<3&&i!==1?"l":""},h)))));
+  const body=el("tbody");
+  L.records.filter(r=>r.kind===cur).forEach(r=>body.append(el("tr",{},el("td",{class:"l"},thShort(r.date)),r.actual,el("td",{class:"l"},r.picks.join(" ")),resultCell(r.hit))));
+  tb.append(body); root.append(el("div",{class:"scroll"},tb));
+}
+function renderRecords(){
+  const B=D.backtest[cur], root=$("records"); root.replaceChildren();
+  root.append(el("p",{class:"mut"},`จำลองว่า "ถ้าทายด้วยสูตรหลักตอนนั้น" ใช้เฉพาะข้อมูลก่อนงวดนั้น (ไม่ใช่คำทายจริงที่ล็อกไว้ จึงแยกจากตารางด้านบน) · ${B.label} ${B.picks} เลข · แสดง 80 งวดล่าสุด`));
+  const tb=el("table",{},el("thead",{},el("tr",{},["งวด","เลขที่ออก","อันดับที่ระบบให้เลขนี้","ผล"].map((h,i)=>el("th",{class:i===0?"l":""},h)))));
+  const body=el("tbody");
+  B.records.forEach(r=>body.append(el("tr",{},el("td",{class:"l"},thShort(r.date)),r.actual,`${r.rank} / ${cur==="top3"?1000:100}`,resultCell(r.hit))));
+  tb.append(body); root.append(el("div",{class:"scroll"},tb));
+}
+
+/* ---------- recent draws ---------- */
+(function(){
+  const tb=el("table",{},el("thead",{},el("tr",{},["งวด","เลข 6 ตัว","3 บน","2 บน","2 ล่าง"].map((h,i)=>el("th",{class:i===0?"l":""},h)))));
+  const body=el("tbody");
+  D.recent_draws.forEach(r=>body.append(el("tr",{},el("td",{class:"l"},thShort(r.draw_date)),r.number6,r.number3_top,r.number2_top,r.number2_bottom)));
+  tb.append(body); $("recent").append(tb);
+})();
+
+/* ---------- method ---------- */
+$("method").append(el("h2",{},"วิธีวัดผลและข้อจำกัด"),
+  el("ul",{},
+    el("li",{},"Walk-forward: ทุกงวดทายด้วยข้อมูลก่อนงวดนั้นเท่านั้น ไม่แอบดูอนาคต (มีเทสต์อัตโนมัติยืนยัน)"),
+    el("li",{},"มีสูตร \"สุ่ม\" เป็นตัวควบคุม และแถบ ±2σ เพื่อดูว่าผลที่เห็นเกินความผันผวนปกติของการสุ่มหรือไม่"),
+    el("li",{},`ค่า p คิดจาก binomial แล้วคูณ ${D.bonferroni_m} (จำนวนการทดสอบทั้งหมด) กันการเลือกสูตรที่ "บังเอิญสวย"`),
+    el("li",{},"สูตรหลักถูกกำหนดไว้ล่วงหน้า (ไม่เปลี่ยนตามผลย้อนหลัง) และคำทายจริงถูกล็อกใน Git ก่อนผลออกเพื่อตรวจสอบได้"),
+    el("li",{},"กำไร/ขาดทุนใช้อัตราจ่ายสมมติใน config.json ไม่ใช่อัตราจริงของผู้ให้บริการ โปรดแก้ให้ตรง"),
+    el("li",{},"ข้อมูลตรวจเฉพาะรูปแบบและความสอดคล้อง ไม่ได้ยืนยันว่าตรงกับผลทางการทุกงวด")));
+
+renderTabs(); renderBoard(); renderLive(); renderRecords();
+</script>
+</body>
+</html>

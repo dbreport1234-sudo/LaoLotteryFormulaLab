@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Lao Lottery Formula Lab</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <div>
+    <h1>Lao Lottery Formula Lab</h1>
+    <p>ระบบวิเคราะห์สูตร · Walk-forward Backtest · บันทึกผลย้อนหลัง</p>
+  </div>
+  <a class="button secondary" href="/api/export.csv">ส่งออก CSV</a>
+</header>
+
+<main>
+  <section class="stats">
+    <article><span>จำนวนงวดในฐานข้อมูล</span><strong id="count">—</strong></article>
+    <article><span>งวดแรก</span><strong id="first">—</strong></article>
+    <article><span>ข้อมูลล่าสุดถึง</span><strong id="last">—</strong></article>
+  </section>
+
+  <section class="panel">
+    <h2>เพิ่มผลรางวัล</h2>
+    <form id="drawForm" class="fields">
+      <label>วันที่งวด<input type="date" name="draw_date" required></label>
+      <label>เลข 6 ตัว<input name="number6" inputmode="numeric" maxlength="6" placeholder="เช่น 012345"></label>
+      <label>3 ตัวบน<input name="number3_top" inputmode="numeric" maxlength="3"></label>
+      <label>2 ตัวบน<input name="number2_top" inputmode="numeric" maxlength="2"></label>
+      <label>2 ตัวล่าง<input name="number2_bottom" inputmode="numeric" maxlength="2"></label>
+      <button type="submit">บันทึกผล</button>
+    </form>
+    <p class="muted">ข้อมูลวันที่ซ้ำที่บันทึกผ่านแบบฟอร์มนี้จะถูกแทนที่โดยตั้งใจ โปรดตรวจสอบก่อนกดบันทึก</p>
+    <div id="drawMessage" class="message"></div>
+  </section>
+
+  <section class="panel">
+    <h2>นำเข้าประวัติ CSV</h2>
+    <form id="importForm" class="inline">
+      <input type="file" name="file" accept=".csv" required>
+      <button type="submit">นำเข้าและรวมข้อมูล</button>
+    </form>
+    <p class="muted">แถววันที่ซ้ำจะไม่เขียนทับข้อมูลเดิมโดยอัตโนมัติ</p>
+    <div id="importMessage" class="message"></div>
+  </section>
+
+  <section class="panel">
+    <h2>วิเคราะห์เลขตามสูตร</h2>
+    <div class="fields">
+      <label>ประเภทผล
+        <select id="kind">
+          <option value="top2">2 ตัวบน</option>
+          <option value="top3">3 ตัวบน</option>
+          <option value="bottom2">2 ตัวล่าง</option>
+        </select>
+      </label>
+      <label>สูตร
+        <select id="strategy"></select>
+      </label>
+      <label>จำนวนเลขที่แสดง
+        <input id="picks" type="number" min="1" max="100" value="10">
+      </label>
+      <button id="predictBtn" type="button">คำนวณอันดับ</button>
+    </div>
+    <p id="predictionInfo" class="muted"></p>
+    <div id="prediction" class="number-grid"></div>
+  </section>
+
+  <section class="panel">
+    <h2>ทดสอบย้อนหลัง</h2>
+    <div class="fields">
+      <label>จำนวนงวดทดสอบ
+        <input id="tests" type="number" min="10" max="500" value="100">
+      </label>
+      <label>เลขต่อสูตร
+        <input id="testPicks" type="number" min="1" max="100" value="10">
+      </label>
+      <button id="backtestBtn" type="button">เริ่ม Backtest</button>
+    </div>
+    <p class="muted">ทดสอบแบบเดินหน้าตามเวลา ใช้เฉพาะงวดก่อนหน้าของแต่ละงวดทดสอบ</p>
+    <div id="backtestMessage" class="message"></div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>อันดับ</th><th>สูตร</th><th>ทายถูก</th><th>ไม่ถูก</th><th>ทดสอบ</th><th>อัตราถูก</th><th>ฐานสุ่ม</th></tr>
+        </thead>
+        <tbody id="backtestBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>ประวัติผลรางวัลล่าสุด</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>วันที่</th><th>เลข 6 ตัว</th><th>3 ตัวบน</th><th>2 ตัวบน</th><th>2 ตัวล่าง</th><th>แหล่งข้อมูล</th></tr></thead>
+        <tbody id="drawsBody"></tbody>
+      </table>
+    </div>
+  </section>
+  <p class="footer">เครื่องมือวิเคราะห์เชิงสถิติเท่านั้น ไม่รับประกันผลรางวัล และไม่ใช่คำแนะนำทางการเงิน</p>
+</main>
+<script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "primary_strategy": "adaptive",
+  "backtest_window": 300,
+  "picks": {"top2": 10, "bottom2": 10, "top3": 30},
+  "payout_multiplier_ASSUMPTION": {"top2": 90, "bottom2": 90, "top3": 500},
+  "draw_cutoff_hour_ict": 20,
+  "note": "payout_multiplier เป็นค่าสมมติเพื่อคำนวณกำไร/ขาดทุนจำลอง โปรดแก้ให้ตรงกับอัตราจ่ายจริงของผู้ให้บริการที่คุณใช้"
+}
