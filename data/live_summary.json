@@ -1,6 +1,6 @@
 {
  "top2": {
-  "sum": {
+  "decay": {
    "tests": 3,
    "hits": 0,
    "misses": 3,
@@ -12,7 +12,31 @@
    "ci_low_pct": 0.0,
    "ci_high_pct": 56.15
   },
-  "gap": {
+  "digitpos": {
+   "tests": 3,
+   "hits": 0,
+   "misses": 3,
+   "hit_pct": 0.0,
+   "baseline_pct": 10.0,
+   "expected_hits": 0.3,
+   "z": -0.58,
+   "p_value": 1.0,
+   "ci_low_pct": 0.0,
+   "ci_high_pct": 56.15
+  },
+  "digit": {
+   "tests": 3,
+   "hits": 0,
+   "misses": 3,
+   "hit_pct": 0.0,
+   "baseline_pct": 10.0,
+   "expected_hits": 0.3,
+   "z": -0.58,
+   "p_value": 1.0,
+   "ci_low_pct": 0.0,
+   "ci_high_pct": 56.15
+  },
+  "frequency": {
    "tests": 3,
    "hits": 0,
    "misses": 3,
@@ -48,7 +72,19 @@
    "ci_low_pct": 0.0,
    "ci_high_pct": 56.15
   },
-  "random": {
+  "gap": {
+   "tests": 3,
+   "hits": 0,
+   "misses": 3,
+   "hit_pct": 0.0,
+   "baseline_pct": 10.0,
+   "expected_hits": 0.3,
+   "z": -0.58,
+   "p_value": 1.0,
+   "ci_low_pct": 0.0,
+   "ci_high_pct": 56.15
+  },
+  "sum": {
    "tests": 3,
    "hits": 0,
    "misses": 3,
@@ -72,43 +108,7 @@
    "ci_low_pct": 0.0,
    "ci_high_pct": 56.15
   },
-  "decay": {
-   "tests": 3,
-   "hits": 0,
-   "misses": 3,
-   "hit_pct": 0.0,
-   "baseline_pct": 10.0,
-   "expected_hits": 0.3,
-   "z": -0.58,
-   "p_value": 1.0,
-   "ci_low_pct": 0.0,
-   "ci_high_pct": 56.15
-  },
-  "digit": {
-   "tests": 3,
-   "hits": 0,
-   "misses": 3,
-   "hit_pct": 0.0,
-   "baseline_pct": 10.0,
-   "expected_hits": 0.3,
-   "z": -0.58,
-   "p_value": 1.0,
-   "ci_low_pct": 0.0,
-   "ci_high_pct": 56.15
-  },
-  "digitpos": {
-   "tests": 3,
-   "hits": 0,
-   "misses": 3,
-   "hit_pct": 0.0,
-   "baseline_pct": 10.0,
-   "expected_hits": 0.3,
-   "z": -0.58,
-   "p_value": 1.0,
-   "ci_low_pct": 0.0,
-   "ci_high_pct": 56.15
-  },
-  "frequency": {
+  "random": {
    "tests": 3,
    "hits": 0,
    "misses": 3,
@@ -134,103 +134,7 @@
   }
  },
  "top3": {
-  "sum": {
-   "tests": 3,
-   "hits": 0,
-   "misses": 3,
-   "hit_pct": 0.0,
-   "baseline_pct": 3.0,
-   "expected_hits": 0.1,
-   "z": -0.3,
-   "p_value": 1.0,
-   "ci_low_pct": 0.0,
-   "ci_high_pct": 56.15
-  },
-  "gap": {
-   "tests": 3,
-   "hits": 0,
-   "misses": 3,
-   "hit_pct": 0.0,
-   "baseline_pct": 3.0,
-   "expected_hits": 0.1,
-   "z": -0.3,
-   "p_value": 1.0,
-   "ci_low_pct": 0.0,
-   "ci_high_pct": 56.15
-  },
-  "recent": {
-   "tests": 3,
-   "hits": 0,
-   "misses": 3,
-   "hit_pct": 0.0,
-   "baseline_pct": 3.0,
-   "expected_hits": 0.1,
-   "z": -0.3,
-   "p_value": 1.0,
-   "ci_low_pct": 0.0,
-   "ci_high_pct": 56.15
-  },
-  "ensemble": {
-   "tests": 3,
-   "hits": 0,
-   "misses": 3,
-   "hit_pct": 0.0,
-   "baseline_pct": 3.0,
-   "expected_hits": 0.1,
-   "z": -0.3,
-   "p_value": 1.0,
-   "ci_low_pct": 0.0,
-   "ci_high_pct": 56.15
-  },
-  "random": {
-   "tests": 3,
-   "hits": 0,
-   "misses": 3,
-   "hit_pct": 0.0,
-   "baseline_pct": 3.0,
-   "expected_hits": 0.1,
-   "z": -0.3,
-   "p_value": 1.0,
-   "ci_low_pct": 0.0,
-   "ci_high_pct": 56.15
-  },
-  "cold": {
-   "tests": 3,
-   "hits": 0,
-   "misses": 3,
-   "hit_pct": 0.0,
-   "baseline_pct": 3.0,
-   "expected_hits": 0.1,
-   "z": -0.3,
-   "p_value": 1.0,
-   "ci_low_pct": 0.0,
-   "ci_high_pct": 56.15
-  },
   "decay": {
-   "tests": 3,
-   "hits": 0,
-   "misses": 3,
-   "hit_pct": 0.0,
-   "baseline_pct": 3.0,
-   "expected_hits": 0.1,
-   "z": -0.3,
-   "p_value": 1.0,
-   "ci_low_pct": 0.0,
-   "ci_high_pct": 56.15
-  },
-  "digit": {
-   "tests": 3,
-   "hits": 0,
-   "misses": 3,
-   "hit_pct": 0.0,
-   "baseline_pct": 3.0,
-   "expected_hits": 0.1,
-   "z": -0.3,
-   "p_value": 1.0,
-   "ci_low_pct": 0.0,
-   "ci_high_pct": 56.15
-  },
-  "pair": {
    "tests": 3,
    "hits": 0,
    "misses": 3,
@@ -254,7 +158,103 @@
    "ci_low_pct": 0.0,
    "ci_high_pct": 56.15
   },
+  "digit": {
+   "tests": 3,
+   "hits": 0,
+   "misses": 3,
+   "hit_pct": 0.0,
+   "baseline_pct": 3.0,
+   "expected_hits": 0.1,
+   "z": -0.3,
+   "p_value": 1.0,
+   "ci_low_pct": 0.0,
+   "ci_high_pct": 56.15
+  },
   "frequency": {
+   "tests": 3,
+   "hits": 0,
+   "misses": 3,
+   "hit_pct": 0.0,
+   "baseline_pct": 3.0,
+   "expected_hits": 0.1,
+   "z": -0.3,
+   "p_value": 1.0,
+   "ci_low_pct": 0.0,
+   "ci_high_pct": 56.15
+  },
+  "recent": {
+   "tests": 3,
+   "hits": 0,
+   "misses": 3,
+   "hit_pct": 0.0,
+   "baseline_pct": 3.0,
+   "expected_hits": 0.1,
+   "z": -0.3,
+   "p_value": 1.0,
+   "ci_low_pct": 0.0,
+   "ci_high_pct": 56.15
+  },
+  "random": {
+   "tests": 3,
+   "hits": 0,
+   "misses": 3,
+   "hit_pct": 0.0,
+   "baseline_pct": 3.0,
+   "expected_hits": 0.1,
+   "z": -0.3,
+   "p_value": 1.0,
+   "ci_low_pct": 0.0,
+   "ci_high_pct": 56.15
+  },
+  "ensemble": {
+   "tests": 3,
+   "hits": 0,
+   "misses": 3,
+   "hit_pct": 0.0,
+   "baseline_pct": 3.0,
+   "expected_hits": 0.1,
+   "z": -0.3,
+   "p_value": 1.0,
+   "ci_low_pct": 0.0,
+   "ci_high_pct": 56.15
+  },
+  "gap": {
+   "tests": 3,
+   "hits": 0,
+   "misses": 3,
+   "hit_pct": 0.0,
+   "baseline_pct": 3.0,
+   "expected_hits": 0.1,
+   "z": -0.3,
+   "p_value": 1.0,
+   "ci_low_pct": 0.0,
+   "ci_high_pct": 56.15
+  },
+  "sum": {
+   "tests": 3,
+   "hits": 0,
+   "misses": 3,
+   "hit_pct": 0.0,
+   "baseline_pct": 3.0,
+   "expected_hits": 0.1,
+   "z": -0.3,
+   "p_value": 1.0,
+   "ci_low_pct": 0.0,
+   "ci_high_pct": 56.15
+  },
+  "cold": {
+   "tests": 3,
+   "hits": 0,
+   "misses": 3,
+   "hit_pct": 0.0,
+   "baseline_pct": 3.0,
+   "expected_hits": 0.1,
+   "z": -0.3,
+   "p_value": 1.0,
+   "ci_low_pct": 0.0,
+   "ci_high_pct": 56.15
+  },
+  "pair": {
    "tests": 3,
    "hits": 0,
    "misses": 3,
@@ -280,7 +280,7 @@
   }
  },
  "bottom2": {
-  "sum": {
+  "decay": {
    "tests": 3,
    "hits": 0,
    "misses": 3,
@@ -292,7 +292,31 @@
    "ci_low_pct": 0.0,
    "ci_high_pct": 56.15
   },
-  "gap": {
+  "digitpos": {
+   "tests": 3,
+   "hits": 0,
+   "misses": 3,
+   "hit_pct": 0.0,
+   "baseline_pct": 10.0,
+   "expected_hits": 0.3,
+   "z": -0.58,
+   "p_value": 1.0,
+   "ci_low_pct": 0.0,
+   "ci_high_pct": 56.15
+  },
+  "digit": {
+   "tests": 3,
+   "hits": 0,
+   "misses": 3,
+   "hit_pct": 0.0,
+   "baseline_pct": 10.0,
+   "expected_hits": 0.3,
+   "z": -0.58,
+   "p_value": 1.0,
+   "ci_low_pct": 0.0,
+   "ci_high_pct": 56.15
+  },
+  "frequency": {
    "tests": 3,
    "hits": 0,
    "misses": 3,
@@ -328,7 +352,19 @@
    "ci_low_pct": 0.0,
    "ci_high_pct": 56.15
   },
-  "random": {
+  "gap": {
+   "tests": 3,
+   "hits": 0,
+   "misses": 3,
+   "hit_pct": 0.0,
+   "baseline_pct": 10.0,
+   "expected_hits": 0.3,
+   "z": -0.58,
+   "p_value": 1.0,
+   "ci_low_pct": 0.0,
+   "ci_high_pct": 56.15
+  },
+  "sum": {
    "tests": 3,
    "hits": 0,
    "misses": 3,
@@ -352,43 +388,7 @@
    "ci_low_pct": 0.0,
    "ci_high_pct": 56.15
   },
-  "decay": {
-   "tests": 3,
-   "hits": 0,
-   "misses": 3,
-   "hit_pct": 0.0,
-   "baseline_pct": 10.0,
-   "expected_hits": 0.3,
-   "z": -0.58,
-   "p_value": 1.0,
-   "ci_low_pct": 0.0,
-   "ci_high_pct": 56.15
-  },
-  "digit": {
-   "tests": 3,
-   "hits": 0,
-   "misses": 3,
-   "hit_pct": 0.0,
-   "baseline_pct": 10.0,
-   "expected_hits": 0.3,
-   "z": -0.58,
-   "p_value": 1.0,
-   "ci_low_pct": 0.0,
-   "ci_high_pct": 56.15
-  },
-  "digitpos": {
-   "tests": 3,
-   "hits": 0,
-   "misses": 3,
-   "hit_pct": 0.0,
-   "baseline_pct": 10.0,
-   "expected_hits": 0.3,
-   "z": -0.58,
-   "p_value": 1.0,
-   "ci_low_pct": 0.0,
-   "ci_high_pct": 56.15
-  },
-  "frequency": {
+  "random": {
    "tests": 3,
    "hits": 0,
    "misses": 3,
